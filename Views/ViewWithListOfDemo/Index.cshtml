@@ -1,0 +1,13 @@
+@{
+    Layout = null;
+}
+
+@model IEnumerable<DotNetNote.Models.DemoModel>
+
+<h2>컬렉션 형태로 출력</h2>
+<ul>
+    @foreach(var m in Model)
+    {
+        <li>@m.Id, @m.Name</li>
+    }
+</ul>

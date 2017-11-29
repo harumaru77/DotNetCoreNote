@@ -1,0 +1,53 @@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Helper Method</title>
+        <script>
+            function CheckForm()
+            {
+                var name = document.getElementById("txtName");
+                var content = document.getElementById("txtContent");
+
+                if(name.value.length < 1 || content.value.length < 1)
+                {
+                    window.alert("이름과 내용을 입력하세요.");
+                    name.focus();
+                    name.select();
+                    return false;
+                }
+
+                return true;
+            }
+        </script>
+    </head>
+    <body>
+        <h2>Helper Method로 폼 구성</h2>
+        @*
+        Html.BeginForm(액션메서드, 컨트롤러, 라우팅 변수, 폼 전송 방식, 추가 속성들)
+        이러한 Helper Method 보다는 Tag Helper를 사용해 순수 HTML 모양에 서버 측 기능을 지원하는 방식을 더 추천한다.
+        *@
+        @using (
+            Html.BeginForm("HelperMethod", "FormValidationDemo", new {},
+                            FormMethod.Post, false, new{
+                                @class="FormStyle",
+                                data_ng_test = "test",
+                                onsubmit = "return CheckForm();"
+                            }
+            )
+        )
+        {
+            <text>이름: </text> @Html.TextBox("txtName")<br/>
+            <text>내용: </text> @Html.TextBox("txtContent")<br/>
+            <input type="submit" value="입력" />
+        }
+
+        @if (ViewBag.ResultString != null)
+        {
+            @ViewBag.ResultString
+        }
+    </body>
+</html>
