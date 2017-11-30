@@ -93,5 +93,45 @@ namespace DotNetNote.Controllers
             return View();
         }
         #endregion
+
+        #region Client Validation
+        [HttpGet]
+        public IActionResult ClientValidation()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ClientValidation(MaximModel model)
+        {
+            // 넘어온 Model에 대한 유효성 검사
+            if(ModelState.IsValid)
+            {
+                return View("Completed");
+            }
+
+            return View();
+        }
+        #endregion
+
+        #region Tag Helper를 사용한 유효성 검사
+        [HttpGet]
+        public IActionResult TagHelperValidation()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult TagHelperValidation(MaximModel model)
+        {
+            // 넘어온 Mode에 대한 유효성 검사
+            if(ModelState.IsValid)
+            {
+                return View("Completed");
+            }
+
+            return View();
+        }
+        #endregion
     }
 }
