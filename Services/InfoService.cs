@@ -1,6 +1,6 @@
-namespace DotNetNore.Services
+namespace DotNetNote.Services
 {
-    public class InfoService
+    public class InfoService : IInfoService
     {
         public string GetUrl()
         {

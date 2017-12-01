@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
+using DotNetNote.Services;
 
 namespace DotNetNote
 {
@@ -27,6 +28,17 @@ namespace DotNetNote
 
             // [Demo] DataFinder 의존성 주입
             services.AddTransient<DotNetNote.Models.DataFinder>();
+
+            // [DI] InfoService 클래스 의존성 주입
+            services.AddSingleton<InfoService>();
+            // [DI] IInfoService 인터페이스 의존성 주입
+            services.AddSingleton<IInfoService, InfoService>();
+            // [DI] CopyrightService 클래스 의존성 주입
+            //services.AddTransient<CopyrightService>();
+            // [DI] ICopyrightService 인터페이스 의존성 주입
+            services.AddScoped<ICopyrightService, CopyrightService>();
+            // [DI] @inject 키워드로 View에 직접 클래스의 속성 또는 메서드 값 출력
+            services.AddSingleton<CopyrightService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
