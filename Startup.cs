@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using DotNetNote.Services;
+using DotNetNote.Settings;
 
 namespace DotNetNote
 {
@@ -16,6 +17,12 @@ namespace DotNetNote
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile($"Settings\\DotNetNoteSettings.json", optional: true);
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -23,6 +30,8 @@ namespace DotNetNote
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // [!] Configuration: JSON 파일의 데이터를 POCO 클래스에 주입
+            services.Configure<DotNetNoteSettings>(Configuration.GetSection("DotNetNoteSettings"));
             services.AddMvc();
             services.AddDirectoryBrowser();
 
