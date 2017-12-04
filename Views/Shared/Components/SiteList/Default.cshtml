@@ -1,0 +1,8 @@
+@model List<DotNetNote.Models.Site>
+
+<ul>
+    @foreach(var site in Model)
+    {
+        <li><a href="@site.Url" target="_blank">@site.Title (@site.Description)</a></li>
+    }
+</ul>
