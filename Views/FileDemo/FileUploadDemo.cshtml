@@ -1,0 +1,8 @@
+@{
+    Layout = null;
+}
+
+<form method="POST" asp-controller="FileDemo" asp-action="FileUploadDemo" enctype="multipart/form-data">
+    <input type="file" name="files" multiple />
+    <input type="submit" value="업로드" />
+</form>
