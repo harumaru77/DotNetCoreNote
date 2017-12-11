@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;                        // ASP.NET Core 인증
+using Microsoft.AspNetCore.Authentication.Cookies;      // ASP.NET Core 인증
 using System.IO;
 using DotNetNote.Services;
 using DotNetNote.Settings;
+using DotNetNote.Models;
 
 namespace DotNetNote
 {
@@ -48,6 +51,26 @@ namespace DotNetNote
             services.AddScoped<ICopyrightService, CopyrightService>();
             // [DI] @inject 키워드로 View에 직접 클래스의 속성 또는 메서드 값 출력
             services.AddSingleton<CopyrightService>();
+
+            services.AddAuthentication("MyCookieAuthenticationScheme").AddCookie(
+                "MyCookieAuthenticationScheme",
+                options => {
+                    options.LoginPath = "/User/Login";
+                    options.AccessDeniedPath = "/User/Forbidden";
+                });
+
+            services.AddAuthorization(options => {
+                // Users Role 이 있으면, Users Policy 부여
+                options.AddPolicy("Users", policy => policy.RequireRole("Users"));
+                // Users Role이 있고, "Admin"이면 "Administrators" 부여
+                options.AddPolicy("Administrators", 
+                                    policy => policy.RequireRole("Users")
+                                                    .RequireClaim("UserId", Configuration
+                                                                            .GetSection("DotNetNoteSettings")
+                                                                            .GetSection("SiteAdmin").Value));
+            });
+
+            services.AddSingleton<IUserRepository, UserRepositoryInMemory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,6 +107,8 @@ namespace DotNetNote
             app.UseDefaultFiles(options);
             app.UseStaticFiles();
             app.UseDirectoryBrowser();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
